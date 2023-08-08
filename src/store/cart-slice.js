@@ -15,12 +15,16 @@ const cartSlice = createSlice({
                 state.items.push({
                     id: newItem.id,
                     price: newItem.price,
-                    quantity: 1,
+                    quantity: newItem.quantity,
                     totalPrice: newItem.price, 
                     name: newItem.title,
                 });
+
+                console.log(newItem.quantity);
+
+
             } else {
-                existingItem.quantity = existingItem.quantity++;
+                existingItem.quantity++;
                 existingItem.totalPrice = existingItem.totalPrice + newItem.price;
             }
         }, 
@@ -29,13 +33,11 @@ const cartSlice = createSlice({
             const existingItem = state.items.find(item => item.id === cartItem.id);
             state.totalQuantity--;
             if(existingItem.quantity === 1) {
-                console.log('inside the if');
                 console.log(existingItem.quantity);
                 state.items = state.items.filter(item => item.id !== cartItem.id);
             } else {
                 existingItem.quantity--;
-                console.log('inside the else');
-                console.log(existingItem.quantity);
+                existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
             }
         }
     }
