@@ -5,7 +5,8 @@ import Products from './components/Shop/Products';
 import { useSelector, useDispatch } from 'react-redux';
 import { uiActions } from './store/ui-slice';
 import Notification from './components/UI/Notification';
-import { sendCartData } from './store/cart-slice';
+import { sendCartData } from './store/cart-actions';
+import { fetchCartData } from './store/cart-actions';
 
 let isInitial = true;
 
@@ -16,13 +17,19 @@ function App() {
   const dispatch = useDispatch();
   const notification = useSelector(state => state.ui.notification);
 
-    useEffect(() => {
-      if(isInitial) {
-        isInitial = false;
-        return;
-      }
+  useEffect(() => {
+    dispatch(fetchCartData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if(isInitial) {
+      isInitial = false;
+      return;
+    }
+    if(cart.changed){
       dispatch(sendCartData(cart));
-    }, [cart, dispatch]);
+    }
+  }, [cart, dispatch]);
   
   return (
     <Layout>
